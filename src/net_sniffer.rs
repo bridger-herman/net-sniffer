@@ -50,19 +50,16 @@ impl NetSniffer {
             .collect()
     }
 
-    fn connected_macs(&mut self) -> Vec<String> {
+    pub fn connected_macs(&mut self) -> Vec<String> {
         let nmap_output =
             self.nmap_cmd.output().expect("Unable to run nmap command");
         String::from_utf8(nmap_output.stdout)
             .expect("Unable to convert nmap output")
             .split('\n')
             .filter(|line| line.starts_with("MAC Address:"))
-            .map(|line| String::from(self.mac_addr_match.find(line).unwrap().as_str()))
+            .map(|line| {
+                String::from(self.mac_addr_match.find(line).unwrap().as_str())
+            })
             .collect()
-
-        // for f in &filtered {
-        // let m = self.mac_addr_match.find(f).unwrap();
-        // println!("{}", m.as_str());
-        // }
     }
 }
