@@ -30,7 +30,7 @@ impl Default for NetSniffer {
         let mut buf = String::new();
         file.read_to_string(&mut buf).expect("Unable to read file");
         let tracking_addresses =
-            buf.split('\n').map(|s| String::from(s)).collect();
+            buf.split('\n').map(String::from).collect();
 
         Self {
             tracking_addresses,
@@ -42,11 +42,10 @@ impl Default for NetSniffer {
 
 impl NetSniffer {
     pub fn compare_connections(&mut self) -> Vec<String> {
-        let connected = self.connected_macs();
-        self.tracking_addresses
+        self.connected_macs()
             .iter()
             .filter(|s| !s.is_empty() && self.tracking_addresses.contains(s))
-            .map(|s| s.clone())
+            .cloned()
             .collect()
     }
 
